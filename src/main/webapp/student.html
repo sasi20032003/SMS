@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Student Enrollment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; /* Light gray background */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px; /* Set a maximum width */
+            margin: auto; /* Center the container */
+            background: #fff; /* White background for the container */
+            padding: 20px; /* Padding around the container */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        h1 {
+            text-align: center; /* Center the heading */
+            color: #4a90e2; /* Blue color for the heading */
+        }
+
+        form {
+            margin-bottom: 20px; /* Margin below the form */
+        }
+
+        .input-group {
+            margin-bottom: 15px; /* Space between input fields */
+        }
+
+        label {
+            display: block; /* Labels on separate lines */
+            margin-bottom: 5px; /* Space below labels */
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%; /* Full width inputs */
+            padding: 10px; /* Padding inside inputs */
+            border: 1px solid #ccc; /* Light gray border */
+            border-radius: 3px; /* Rounded corners */
+        }
+
+        button {
+            background-color: #4a90e2; /* Blue background */
+            color: white; /* White text */
+            border: none; /* No border */
+            padding: 10px 15px; /* Padding */
+            border-radius: 3px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor */
+            font-size: 16px; /* Font size */
+            width: 100%; /* Full-width button */
+        }
+
+        button:hover {
+            background-color: #357ab8; /* Darker blue on hover */
+        }
+
+        .results {
+            margin-top: 20px; /* Space above results */
+        }
+
+        .enrollment-success {
+            background-color: #dff0d8; /* Light green background for success */
+            padding: 10px; /* Padding */
+            border: 1px solid #c3e6cb; /* Green border */
+            border-radius: 3px; /* Rounded corners */
+        }
+
+        .no-enrollment {
+            background-color: #f2dede; /* Light red background for no match */
+            padding: 10px; /* Padding */
+            border: 1px solid #ebccd1; /* Red border */
+            border-radius: 3px; /* Rounded corners */
+        }
+
+        .already-enrolled {
+            background-color: #f9ebea; /* Light orange background for already enrolled */
+            padding: 10px; /* Padding */
+            border: 1px solid #f2c94c; /* Orange border */
+            border-radius: 3px; /* Rounded corners */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Automatic Student Enrollment</h1>
+        <form id="enrollmentForm">
+            <div class="input-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" required placeholder="Enter Student Name">
+            </div>
+            <div class="input-group">
+                <label for="studentEmail">Student Email</label>
+                <input type="email" id="studentEmail" required placeholder="Enter Student Email">
+            </div>
+            <button type="submit">Enroll Student</button>
+        </form>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        // Sample existing student records
+        const existingStudents = [
+            { name: 'John Doe', email: 'john.doe@example.com' },
+            { name: 'Jane Smith', email: 'jane.smith@example.com' },
+            { name: 'Emily Johnson', email: 'emily.johnson@example.com' },
+            { name: 'Michael Brown', email: 'michael.brown@example.com' }
+        ];
+
+        // Function to enroll a student
+        function enrollStudent(inputName, inputEmail) {
+            const studentExists = existingStudents.some(student => {
+                return student.name.toLowerCase() === inputName.toLowerCase() &&
+                       student.email.toLowerCase() === inputEmail.toLowerCase();
+            });
+
+            if (studentExists) {
+                return 'already enrolled'; // Student already exists
+            } else {
+                // Add the new student to the existing list
+                existingStudents.push({ name: inputName, email: inputEmail });
+                return 'success'; // New student added
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('enrollmentForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent page refresh
+            const studentName = document.getElementById('studentName').value;
+            const studentEmail = document.getElementById('studentEmail').value;
+
+            const enrollmentResult = enrollStudent(studentName, studentEmail);
+            const resultsDiv = document.getElementById('results');
+
+            // Clear previous results
+            resultsDiv.innerHTML = '';
+
+            // Provide feedback based on the enrollment result
+            if (enrollmentResult === 'success') {
+                resultsDiv.innerHTML = '<div class="enrollment-success">Student has been successfully enrolled!</div>';
+            } else if (enrollmentResult === 'already enrolled') {
+                resultsDiv.innerHTML = '<div class="already-enrolled">This student is already enrolled!</div>';
+            }
+        });
+    </script>
+</body>
+
+</html>
